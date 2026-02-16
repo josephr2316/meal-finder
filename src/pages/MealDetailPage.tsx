@@ -9,30 +9,33 @@ export default function MealDetailPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const fetchMealById = async () => {
-      if (!id) return
-      try {
-        setLoading(true)
-        setError('')
-        const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+    if (!id) return
+    setLoading(true)
+    setError('')
+    fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+      .then((res) => {
         if (!res.ok) throw new Error('Request failed')
-        const data: MealsResponse = await res.json()
+        return res.json()
+      })
+      .then((data: MealsResponse) => {
         setMeal(data.meals?.[0] ?? null)
-      } catch {
+      })
+      .catch(() => {
         setError('Could not load meal detail.')
-      } finally {
+      })
+      .finally(() => {
         setLoading(false)
-      }
-    }
-
-    fetchMealById()
+      })
   }, [id])
 
   return (
-    <main className="min-h-screen w-full bg-emerald-950 px-4 py-10">
-      <section className="mx-auto max-w-4xl">
-        <Link to="/" className="mb-6 inline-block rounded bg-white px-4 py-2 font-medium text-slate-800">
-          Back
+    <main className="min-h-screen w-full bg-emerald-950 text-emerald-50">
+      <div className="mx-auto w-[92%] max-w-5xl py-8">
+        <Link
+          to="/"
+          className="mb-4 inline-flex items-center gap-2 rounded-lg border border-emerald-50/10 bg-emerald-50/10 px-4 py-2 text-sm font-medium text-emerald-50 transition hover:bg-emerald-50/15"
+        >
+          ← Back
         </Link>
 
         {loading && <p className="text-emerald-50">Loading...</p>}
@@ -40,18 +43,33 @@ export default function MealDetailPage() {
         {!loading && !error && !meal && <p className="text-emerald-50">Meal not found.</p>}
 
         {meal && (
-          <article className="overflow-hidden rounded-xl bg-white shadow-xl">
-            <img src={meal.strMealThumb} alt={meal.strMeal} className="h-80 w-full object-cover" />
-            <div className="p-6">
-              <h1 className="text-3xl font-bold text-slate-900">{meal.strMeal}</h1>
-              <p className="mt-2 text-slate-600">
-                {meal.strCategory} · {meal.strArea}
+          <article className="overflow-hidden rounded-2xl bg-emerald-50/95 text-emerald-950 shadow-xl">
+            <img
+              src={meal.strMealThumb}
+              alt={meal.strMeal}
+              className="h-72 w-full object-cover"
+            />
+            <div className="p-6 md:p-8">
+              <h1 className="text-3xl font-semibold tracking-tight">{meal.strMeal}</h1>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {meal.strCategory && (
+                  <span className="rounded-full bg-emerald-900/10 px-3 py-1 text-xs font-semibold">
+                    {meal.strCategory}
+                  </span>
+                )}
+                {meal.strArea && (
+                  <span className="rounded-full bg-emerald-900/10 px-3 py-1 text-xs font-semibold">
+                    {meal.strArea}
+                  </span>
+                )}
+              </div>
+              <p className="mt-5 max-w-3xl whitespace-pre-line text-sm leading-7 text-emerald-950/80 md:text-base">
+                {meal.strInstructions}
               </p>
-              <p className="mt-4 whitespace-pre-line text-slate-700">{meal.strInstructions}</p>
             </div>
           </article>
         )}
-      </section>
+      </div>
     </main>
   )
 }

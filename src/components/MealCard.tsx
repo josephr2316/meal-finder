@@ -10,10 +10,9 @@ export default function MealCard({ meal }: MealCardProps) {
     return ( 
         <Link 
             to={`/meal/${meal.idMeal}`} 
-            className="overflow-hidden rounded-xl bg-white shadow transition hover:scale-[1.01]
-            hover:shadow-lg border border-slate-200">
+            className="overflow-hidden rounded-xl bg-emerald-50/95 text-emerald-950 shadow-md transition hover:scale-[1.01] hover:shadow-lg border border-emerald-200/50">
             <img src={meal.strMealThumb} alt={meal.strMeal} className="h-52 w-full object-cover" />
-            <h3 className="p-3 font-semibold text-slate-800">{meal.strMeal}</h3>
+            <h3 className="p-3 text-lg font-semibold text-emerald-950 sm:text-xl">{meal.strMeal}</h3>
         </Link>
        )
 }

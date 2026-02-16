@@ -8,5 +8,15 @@ export type Meal = {
 }
 
 export type MealsResponse = {
-    meals: Meal[] | null
+  meals: Meal[] | null
+}
+
+export type Category = {
+  strCategory: string
+  strCategoryThumb: string
+  strCategoryDescription?: string
+}
+
+export type CategoriesResponse = {
+  categories: Category[] | null
 }
